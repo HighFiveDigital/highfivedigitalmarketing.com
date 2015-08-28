@@ -1,0 +1,103 @@
+<?php
+
+
+
+class filter {
+ 
+  public function input_ary(&$source) {
+		// clean all elements in this array
+    if (is_array($source)) {
+  		foreach ($source as $i => $source_a) {
+  				$source[$i] = $this->input_str($source_a);
+      }
+		  return $source;
+    }
+	}
+  
+  public function input_str(&$source) {
+    //removes \ chars
+		$source = str_replace('\\', '', $source);	
+    //remove html tags
+    $source = strip_tags($source);
+    //$source = str_replace('<script', '', $source);
+		// url decode
+		$source = html_entity_decode($source, ENT_QUOTES, "ISO-8859-1");
+		// convert decimal
+		$source = preg_replace('/&#(\d+);/me',"chr(\\1)", $source);  // decimal notation
+		// convert hex
+		$source = preg_replace('/&#x([a-f0-9]+);/mei',"chr(0x\\1)", $source);  // hex notation
+		//adds slashes before all ' chars
+		$source = addslashes($source);
+    //remove extra space
+    $source = trim($source);
+		
+		return $source;
+  }
+  
+  
+  public function output_str($source, $view = 'html_single', $size = 0) {
+    switch($view) {
+      case 'html_single':
+
+        // put in html special chars &ensp;
+        $source = htmlspecialchars($source);
+        
+        $source = str_replace(array("\r\n", "\r", "\n"), " ", $source);
+        
+        //trim string
+        $source = $this->trim_string($source, $size);
+        
+        //remove all \ characters before quotes
+        $source = stripslashes($source);
+        break;
+      case 'html_long':
+        // put in html special chars &ensp;
+        $source = htmlspecialchars($source);
+        
+        //trim string
+        $source = $this->trim_string($source, $size);
+        
+        $source = str_replace(array("\r\n", "\r", "\n"), " <br/> ", $source);
+        $source = str_replace("  ", " &ensp;", $source);
+        
+        //build links
+        $source = $this->build_links($source);
+        
+        //remove all \ characters before quotes
+        $source = stripslashes($source);
+        break;
+      case 'textarea':
+        
+        //remove all \ characters before quotes
+        $source = stripslashes($source);
+        break;
+      case 'email':
+        //remove all \ characters before quotes
+        $source = stripslashes($source);
+        
+        //strip all newline characters
+        $source = str_replace(array('\r\n', '\r', '\n'), " ", $source);
+        break;
+    }
+    return $source;
+  }
+  
+  private function build_links($string) {
+    $ret = ' ' . $string;
+    $ret = preg_replace("#(^|[\n \(\)])([\w]+?://[\w]+[^ \"\n\r\t\(\)<]*)#ise", "'\\1<a href=\"\\2\" target=\"_blank\">\\2</a>'", $ret);
+    $ret = preg_replace("#(^|[\n \(\)])((www|ftp)\.[^ \"\t\n\r\(\)<]*)#ise", "'\\1<a href=\"http://\\2\" target=\"_blank\">\\2</a>'", $ret);
+    $ret = preg_replace("#(^|[\n \(\)])([a-z0-9&\-_\.]+?)@([\w\-]+\.([\w\-\.]+\.)*[\w]+)#i", "\\1<a href=\"mailto:\\2@\\3\">\\2@\\3</a>", $ret);
+    $ret = substr($ret, 1);
+
+	  return $ret;
+	}
+  
+  private function trim_string($source, $size) {
+    if (strlen($source) > $size && !empty($size)) {
+	    $source = substr($source, 0, $size).'...';
+    }   
+    return $source; 
+  }
+}
+
+?>

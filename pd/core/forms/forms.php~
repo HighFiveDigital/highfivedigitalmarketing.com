@@ -1,0 +1,59 @@
+<?php
+
+class forms extends main {
+  private $form;
+  private $field;
+  
+  public function build_method($form) {
+    if (empty($form['method'])) {
+      echo 'POST';
+      return;
+    }
+    echo 'GET';
+  }
+  
+  public function build_action($form) {
+    $this->build_pd_link($form);
+  }
+  
+  /**
+   * Form build methods
+   * @return 
+   * @param object $form
+   */
+  
+  public function start($form) {
+    $this->form = $form;
+    $this->build('html', array('file' => 'start', 'form' => $this->form)); 
+  }
+  
+  public function input($type, $field) {
+    $this->field = $field;
+    pd('forms')->build('html', array('file' => $type, 'form' => $this->form, 'field' => $this->field));
+  }
+  
+  public function error($messages = array()) {
+    $error = pd($this->form['pd'])->get_errors($this->form['action'], $this->field);
+    if (!empty($error)) {
+      if (!empty($messages[$error])) {
+        pd('forms')->write($messages[$error], 'html');
+      }
+      else {
+        pd('forms')->write($error, $format);
+      }
+    }
+    else if (!empty($messages['default'])) {
+      pd('forms')->write($messages['default'], 'html');
+    }
+  }
+  
+  public function end() {
+    pd('forms')->build('html', array('file' => 'end', 'form' => $this->form));
+  }
+  
+  public function write_default() {
+    pd('forms')->write($_REQUEST[$this->field['name']]);
+  }
+}
+
+?>

@@ -1,0 +1,10 @@
+<?php
+
+$data['qry'] = "select * from $data[table] where ";
+
+foreach ($data['fields'] as $field => $value) {
+  $data['qry'] .= "$field = '$value' &&";
+}
+$data['qry'] = rtrim($data['qry'], '&&');
+
+?>

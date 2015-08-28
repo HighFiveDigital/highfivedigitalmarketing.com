@@ -1,0 +1,1 @@
+<input type="file" name="<?php pd('write')->str($data['field']['name'], 'html'); ?>" value="<?php pd('forms')->write_default(); ?>"/>

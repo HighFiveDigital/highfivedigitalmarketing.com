@@ -1,0 +1,3 @@
+<?php
+pd('users')->logout();
+?>

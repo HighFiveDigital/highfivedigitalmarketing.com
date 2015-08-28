@@ -1,0 +1,411 @@
+/*====================================================================
+// CORE STYLES
+//===================================================================*/
+* {
+	margin: 0;
+	padding: 0;
+	border:0;
+}
+body, html {
+	width: 100%;
+	font-family: helvetica, arial;
+	
+	background-image: url('../img/bg.jpg');
+}
+.red {
+	color: #d52128 !important;
+}
+a {
+	border: 0;
+}
+
+/*====================================================================
+// PAGE LAYOUT
+//===================================================================*/
+#page-conatiner {
+	width: 945px;
+	margin: 0 auto;
+	overflow: hidden;
+	margin-top: 12px;
+}
+#left-col {
+	width: 184px;
+	float: left;
+	position: fixed;
+}
+#right-col {
+	overflow: hidden;
+	padding-left: 230px;
+}
+
+/*====================================================================
+// LEFT COLUMN AND MAIN MENU
+//===================================================================*/
+#logo {
+	
+}
+#logo-copy {
+	text-align: center;
+	font-size: 12px;
+	font-weight: bold;
+}
+#left-col-menu-container {
+	list-style: none;
+	overflow: hidden;
+	margin-top: 15px;
+}
+#left-col-menu-container li {
+	float: left;
+	margin-right: 9px;
+}
+#left-col-menu-container li.list-last {
+	margin-right: 0;
+}
+#left-col-menu-container a {
+	display: block;
+	text-decoration: none;
+	color: #333333;
+}
+.left-col-menu-copy {
+	display: block;
+	font-size: 10px;
+	text-align: center;
+}
+#contact-us-form-container {
+	display: none;
+}
+#contact-us {
+	display: block;
+	text-align: center;
+	margin-top: 21px;
+}
+.home-icon, .science-icon, .us-icon, .services-icon {
+	width: 39px;
+	height: 39px;
+	margin-bottom: 4px;
+	display: block;
+}
+.home-icon {
+	background: url(../img/main-menu/home-icon.png) top left no-repeat;
+}
+.science-icon {
+	background: url(../img/main-menu/science-icon.png) top left no-repeat;
+}
+.services-icon {
+	background: url(../img/main-menu/services-icon.png) top left no-repeat;
+}
+.us-icon {
+	background: url(../img/main-menu/us-icon.png) top left no-repeat;
+}
+.home-icon:hover, .science-icon:hover, .us-icon:hover, .services-icon:hover, #home-page-top-banner a:hover {
+	background-position: bottom left;
+}
+
+/*====================================================================
+// RIGHT COLUMN: HOME PAGE
+//===================================================================*/
+#home-page-top-banner {
+	background: url(../img/home-page/top-banner.png) no-repeat;
+	position: relative;
+	width: 715px;
+	height: 262px;
+}
+#home-page-top-banner a {
+	display: block;
+	background:url(../img/home-page/find-out-more.png) top left no-repeat;
+	position: absolute;
+	text-align: -9999px;
+	width:145px;
+	height:34px;
+	right: 150px;
+    top: 207px;
+}
+#home-page-middle-banner {
+	margin-top: 33px;
+}
+#home-page-middle-copy {
+	font-family: Georgia;
+	text-align: center;
+	font-style: italic;
+}
+#home-page-services-header {
+	font-size: 18px;
+	font-weight: bold;
+	margin-bottom: 15px;	
+}
+#home-page-middle-copy-title {
+	font-size: 24px;
+	margin-top: 27px;
+}
+#home-page-middle-copy-list {
+	text-align: center;
+}
+#home-page-middle-copy-list li {
+	list-style: none;
+	font-size: 18px;
+	padding-top: 20px;
+}
+#home-page-middle-copy-CTA {
+	margin-top: 26px;
+}
+#home-page-middle-copy-CTA a {
+	font-size: 18px;
+}
+#home-page-services-scroller {
+	margin-top: 40px;
+	text-align: center;
+}
+#home-page-services-scroller-items {
+	list-style: none;
+	overflow: hidden;
+	background-image: url('../img/home-page/social-media-scroller-bg.png');
+	height: 162px;
+}
+#home-page-services-scroller-items li {
+	float: left;
+	width: 237px;
+	text-align: left;
+	height: 100%;
+}
+#home-page-services-scroller-items a {
+	text-decoration: none;
+	display: block;
+}
+#home-page-services-scroller-items a:hover {
+	text-decoration: none;
+}
+.home-page-service-title {
+	font-size: 19px;
+	font-weight: bold;
+	margin: 14px 14px 0 14px;
+	color: #000000;
+}
+.home-page-service-copy {
+	margin: 20px 71px 0px 14px;	
+	font-size: 13px;
+	color: #393737;
+}
+#home-page-service-lead-gen {
+	background: url('../img/home-page/service-scroller-lead-gen-bg.png') no-repeat right bottom;
+	border-right: 1px solid #bfbaba;
+}
+#home-page-service-social {
+	background: url('../img/home-page/service-scroller-social-media-bg.png') no-repeat right 13px;
+	border-right: 1px solid #bfbaba;
+}
+#home-page-service-mobile {
+	background: url('../img/home-page/service-scroller-mobile-bg.png') no-repeat right bottom;
+}
+/*====================================================================
+// INNER CONTENT
+//===================================================================*/
+.inner-header {
+	font-weight: bold;
+	font-size: 30px;
+	margin-top: 30px;
+}
+.inner-p {
+	margin-top: 25px;
+}
+#accordions {
+	margin-top: 35px;
+}
+.accordion-header {
+	font-weight: bold;
+	font-size: 30px;
+	margin-top: 20px;
+	padding: 5px 0;
+}
+.accordion-header:hover {
+	cursor: pointer;
+	background-color: #eaeaea;
+}
+.accordion-content {
+	border-top: 1px solid #ede9e9;
+	border-bottom: 1px solid #ede9e9;
+	padding-bottom: 25px;
+	display: none;
+}
+.inner-list-header {
+	margin-top: 40px;
+	font-size: 16px;
+	font-weight: bold;
+}
+.inner-list {
+	margin: 15px 0 0 18px;
+	list-style: none;
+}
+.inner-list li {
+	line-height: 30px;
+}
+.inner-list img {
+	margin-right: 5px;
+	vertical-align: middle;
+}
+.inner-emp {
+	font-weight: bold;
+	font-style: italic;
+	font-size: 16px;
+}
+.service-link {
+	text-decoration: none;
+	color: #D52128;
+}
+.service-link:hover {
+	text-decoration: underline;
+}
+.us-profile {
+	background-color: #f0f0f0;
+	overflow: hidden;
+	padding: 5px;
+	border: 1px solid #eaeaea;
+	float: left;
+	width: 340px;
+}
+.us-profile-pic {
+	padding: 3px;
+	border: 1px solid #eaeaea;
+	float: left;
+	background-color: #ffffff;
+}
+.us-profile-pic img {
+	vertical-align: bottom;
+	width: 75px;
+}
+.us-profile-details {
+	overflow: hidden;
+	padding: 10px;
+}
+.us-profile-name {
+	font-weight: bold;
+	font-size: 14px;
+}
+.us-profile-title {
+	text-transform: uppercase;
+	font-size: 12px;
+	margin-top: 5px;
+}
+.us-profile-linked-in img {
+	vertical-align: middle;
+	margin-right: 5px;
+}
+.us-profile-linked-in a {
+	text-decoration: none;
+	color: #333333;
+	display: block;
+	margin-top: 25px;
+	font-size: 14px;
+	padding: 3px 0;
+}
+.us-profile-linked-in a:hover {
+	text-decoration: none;
+	border-bottom: 2px solid #909090;
+}
+#science-process-container {
+	border: 1px solid #eaeaea;
+	margin-top: 15px;
+}
+#science-process-tabs {
+	overflow: hidden;
+	list-style: none;
+	background: url('../img/science/process-tabs-bg.png');
+}
+#science-process-tabs li {
+	float: left;
+	font-size: 18px;
+	font-weight: bold;
+	line-height: 45px;
+	text-align: center;
+	cursor: pointer;
+}
+.science-tab-number {
+	font-size: 36px;
+	vertical-align: middle;
+	margin-right: 5px;
+}
+.science-process-title {
+	vertical-align: middle;
+}
+.science-process-content {
+	padding: 0 25px 25px;
+}
+.step-title {
+	font-size: 40px;
+	font-weight: bold;
+}
+
+/*====================================================================
+// FOOTER
+//===================================================================*/
+#footer-container{
+	height: 112px;
+	background: url('../img/footer-bg.png') repeat-x top left;
+	margin-top: 54px;
+  overflow:hidden;
+}
+#footer {
+	width: 945px;
+	margin: 0 auto;
+	padding-top: 10px;
+}
+#footer-logo {
+	margin-left: 230px;
+}
+#footer-copy {
+	font-size: 12px;
+	text-align: right;
+	color: #ffffff;
+	float: right;
+}
+#fb-like{margin-left:230px;margin-top:10px;color:#fff;}
+#footer-follow a{color:#4f67ba;text-decoration:none;}
+#footer-follow a:hover{color:#7186c2;}
+#footer-follow{margin-top:42px;}
+#footer-follow img{margin-right:5px;}
+
+
+/*====================================================================
+// FORM STYLES
+//===================================================================*/
+
+.contact-header {
+	border-bottom: 4px solid #000000;
+    color: #000000;
+    font-size: 16px;
+    font-weight: bold;
+    padding-bottom: 8px;
+    margin: 24px 0 12px;
+}
+input#submit {
+	border: none;
+	padding: none;
+}
+input, textarea {
+    border: 1px solid #CCCCCC;
+    color: #CCCCCC;
+    font: inherit;
+    padding: 4px;
+    width: 170px;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;
+    border-radius:3px;
+    margin-bottom:6px;
+}
+input.message {
+	height: 100px;
+	width: 170px;
+}
+input:focus, textarea:focus {
+	border-color: #999;
+	color: #333333;
+}
+.focus {
+	color: #999;
+}
+.typing {
+	color: #999;
+}
+textarea {
+	height: 100px;
+}
+

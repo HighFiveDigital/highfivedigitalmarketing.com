@@ -1,0 +1,33 @@
+<?php
+
+namespace pd;
+
+class links extends \pd\main {
+  
+  public $tables = array(
+    'links' => array(
+      'fields' => array(
+        'title' => array('type' => 'varchar', 'length' => 100, 'required' => true),
+        'link' => array('type' => 'varchar', 'length' => 100, 'required' => true, 'no_duplicate' => true),
+        'description' => array('type' => 'text', 'length' => 1500)
+      ),
+      'connections' => array(
+        'user_id' => array('pd' => 'users', 'type' => 'logged_in')
+      )
+    )
+  );
+  
+  public function build_preview($data) {
+    if ($video = pd('videos')->get_video($this->get($data, 'link'))) {
+      if ($video['source'] == 'youtube') {
+        pd('videos')->build('html', array('file' => 'youtube', 'link' => $data, 'video' => $video));
+      }
+    }
+  }
+  
+  
+  
+  
+}
+
+?>

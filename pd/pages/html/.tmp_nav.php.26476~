@@ -1,0 +1,20 @@
+<ul id="nav">
+<?php
+
+$nav_ary = array(
+  'home' => 'index.php',
+  'films' => 'films.php',
+  'music' => 'music.php',
+  'chat' => 'chat.php',
+  'contact' => 'contact.php');
+
+foreach ($nav_ary as $label => $path) {
+  ?>
+  <li class="<?php if (strpos($_SERVER['PHP_SELF'], $path) !== false){echo 'active';} ?>">
+    <a href="<?php echo $path; ?>"><?php echo $label; ?></a>
+  </li>
+  <?php
+}
+
+?>
+</ul>

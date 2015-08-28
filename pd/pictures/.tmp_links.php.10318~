@@ -1,0 +1,22 @@
+<?php
+
+class links extends main {
+  
+  public $tables = array(
+    'links' => array(
+      'fields' => array(
+        'title' => array('type' => 'varchar', 'length' => 100, 'required' => true),
+        'link' => array('type' => 'varchar', 'length' => 100, 'required' => true, 'no_duplicate' => true)
+      ),
+      'connections' => array(
+        'user_id' => array('pd' => 'users', 'type' => 'logged_in')
+      )
+    )
+  );
+  
+  
+  
+  
+}
+
+?>

@@ -1,0 +1,1 @@
+<input type="text" name="<?php pd('forms')->write($data['field']['name'], 'html'); ?>" value="<?php pd('forms')->write_default($data['field'], 'html'); ?>"/>

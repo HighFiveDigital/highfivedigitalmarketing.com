@@ -1,0 +1,53 @@
+in file
+<?php 
+
+pd('forms')->start(array(
+  'pd' => 'links',
+  'table' => 'links',
+  'action' => 'add',
+  'on_success' => 'link_submitted.php'));
+
+?>
+
+link:
+<?php  
+
+pd('forms')->input('text', array(
+  'name' => 'link'));
+  
+?>
+
+<?php  
+pd('forms')->error(array(
+  'default' => 'submit any link', 
+  'required' => 'enter a link', 
+  'too long' => 'seems that link is too long',
+  'duplicate' => 'that link has already been submitted'));
+?>
+<br/>
+
+title:
+<?php  
+
+pd('forms')->input('text', array(
+  'name' => 'title'));
+  
+?>
+
+<?php  
+pd('forms')->error(array(
+  'default' => 'set a title', 
+  'required' => 'enter a title', 
+  'too long' => 'seems that title is too long'));
+?>
+
+<br/>
+
+
+
+<?php
+  
+pd('forms')->input('submit', array('title' => 'Submit'));
+pd('forms')->end();
+
+?>

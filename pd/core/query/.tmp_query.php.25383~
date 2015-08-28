@@ -1,0 +1,221 @@
+<?php
+namespace pd\core;
+/*
+ * Object Query
+ * 
+ * This object handles all queries
+ * 
+ * Selects, updates, inserts, and deletes
+ * 
+ * Security - Never allow user input to be the query string
+ * 
+ */
+
+class query extends \pd\main {
+	
+  private $rec;
+  
+  public function __construct() {
+    $this->open_mysql();
+  }
+
+	/*
+	 * Select function
+	 * 
+	 * returns false if query was not valid
+	 * 
+	 * parameters
+	 * 
+	 * select_qry - string that defines which select query to execute
+	 * data - array of data values to be used in the query statement
+	 * 
+	 */
+	public function select($data) {
+	  
+    if (!pd($this->get_parent(), 'tables')->validate($data, 'select')) {
+	    return false;
+    }
+    
+    $this->set_default($data, 'select', 'match');
+	  
+   //include should define $data[qry] and $data[table] (optional)
+	  if ($this->include_file($this->get_parent(), $data['select'], 'selects', $data)) {
+	    
+	  }
+    else if ($this->include_file($this->get_pd(), $data['select'], 'selects', $data)) {
+      
+    }
+    else {
+      $this->err('no query found');
+      return;
+    }
+    
+    if (empty($data['qry'])) {
+      $this->err('query is not being set');
+    }
+
+		$res = mysql_query($data['qry']) or die(mysql_error());
+
+     //if the table is defined the records will be stored in ram
+    while(($record = mysql_fetch_assoc($res))) {
+      if (!empty($data['table'])) {
+        $this->rec[$table][$record['id']] = $record;
+      }
+      $sel_ary[] = $record;
+    }
+    
+    if (empty($sel_ary)) {
+      return array();
+    }
+    
+		return $sel_ary; 	
+
+  }
+  
+  public function get($data) {
+    $this->req(array('id'), $data);
+    $this->set_default($data, 'table', pd($this->get_parent(), 'tables')->get_default());
+    $this->req(array('table'), $data);
+
+    if (!isset($this->rec[$data['table']][$data['id']])) {
+      $this->rec[$data['table']][$data['id']] = $this->select_row($data);
+    }
+    if (!empty($data['field'])) {
+      return $this->rec[$data['table']][$data['id']][$data['field']];
+    }
+    else {
+      return $this->rec[$data['table']][$data['id']];
+    }
+  }
+  
+  private function select_row($data) {
+    $this->req(array('id'), $data);
+    $this->set_default($data, 'table', pd($this->get_parent(), 'tables')->get_default());
+
+    
+    $rows = $this->select(array(
+      'select' => 'match',
+      'table' => $data['table'],
+      'fields' => array('id' => $data['id'])));
+    return $rows[0];
+	
+  }
+  
+  
+  public function get_count() {
+    $q_str = 'select FOUND_ROWS();';
+    $res = mysql_query($q_str) or die(mysql_error());
+
+    return mysql_result($res, 0, 'FOUND_ROWS()');
+  }
+  
+	
+	/*
+	 * Gets row count from last query
+	 */
+	
+	public function insert(&$data) {
+	  if (!pd($this->get_parent(), 'tables')->validate($data, 'add')) {
+	    return false;
+    }
+    $this->set_default($data, 'insert', pd($this->get_parent(), 'tables')->get_stored($data));
+    
+    $this->req(array('insert'), $data);
+    
+		/*
+		 * INSERT INTO 'tablename' (col1, col2, col3, col4, col5) values ('foobar', 495, 'val3', 720, 834.987)
+		 */
+
+		// Find all the keys (column names) from the array $data
+		$columns = array_keys($data['insert']);
+		
+		// Find all the values from the array $data
+		$values = array_values($data['insert']);
+		
+		// quote_smart the values
+		for ($i = 0; $i < count($values); $i++){
+			$values[$i] = "'".$values[$i]."'";
+		}
+		
+		// Compose the query
+		$sql = "INSERT INTO $data[table] ";
+		
+		// create comma-separated string of column names, enclosed in parentheses
+		$sql .= "(" . implode(", ", $columns) . ")";
+		$sql .= " values ";
+		
+		// create comma-separated string of values, enclosed in parentheses
+		$sql .= "(" . implode(", ", $values) . ")";
+		
+		$result = mysql_query ($sql) or die (mysql_error());
+		
+		$data['id'] = mysql_insert_id();
+    
+    $this->select_row($data);
+    
+    return $data['id'];
+  }
+	
+	public function update($data) {
+	  if (!pd($this->get_parent(), 'tables')->validate($data, 'edit')) {
+	    return false;
+    }
+    $this->set_default($data, 'update', pd($this->get_parent(), 'tables')->get_stored($data));
+    
+    $this->req(array('update'), $data);
+    
+	  $this->req(array('id', 'update'), $data);
+    
+    //check access to this table
+    
+    
+		/*
+		 * Data is in the form
+		 * 
+		 * column => value
+		 */
+
+		$qry_str = "update $data[table] set ";
+
+		foreach ($data['update'] as $col => $val) {
+			$qry_str .= "$col = '$val',";
+      //update rec
+      //$this->rec[$data['table']][$data['id']][$col] = $val;
+		}
+
+		$qry_str = rtrim($qry_str, ',');
+		
+		$qry_str .= " where id = '$data[id]'";
+		
+		//echo $qry_str;
+		$result = mysql_query ($qry_str) or die (mysql_error());
+    
+    $this->select_row($data);
+    
+    return true;
+	}
+	
+	public function delete($data) {
+	  if (!pd($this->get_parent(), 'tables')->validate($data, 'remove')) {
+	    return false;
+    }
+    
+	  $this->req(array('id'), $data);
+
+		$qry_str = " delete from $data[table] where id = '$data[id]' ";
+		
+		$result = @mysql_query ($qry_str) or die (mysql_error());
+    
+    unset($this->rec[$data['table']][$data['id']]);
+    
+    return true;
+	}
+
+	public function open_mysql() {
+		$conn = mysql_connect(MYSQL_LOCATION, MYSQL_USER, MYSQL_PASSWORD)
+	    or die(mysql_error());
+	  mysql_select_db(MYSQL_DATABASE ,$conn) or die(mysql_error());
+	}
+}
+
+?>

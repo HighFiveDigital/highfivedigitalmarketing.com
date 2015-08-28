@@ -1,0 +1,34 @@
+<?php
+namespace pd\core;
+class users extends \pd\main {
+  public $tables = array(
+    'users' => array(
+      'fields' => array(
+        'email' => array('type' => 'varchar', 'length' => 100, 'no_duplicate' => true),
+        'ip_add' => array('type' => 'varchar', 'length' => 16),
+        'password' => array('type' => 'varchar', 'length' => 20)
+      ),
+      'connections' => array()
+    )
+  );
+  
+  public function get_connection($data) {
+    //data defines $data[type]
+    switch($data['type']) {
+      case 'logged_in':
+        return $this->get_session_id();
+        break;
+    }
+  }
+  
+  public function get_session_id() {
+    if (!empty(pd('users', 'session')->get('id'))) {
+      return pd('users', 'session')->get('id');
+    }
+    //try to create a user based on cookie information
+    
+    
+  }
+}
+
+?>

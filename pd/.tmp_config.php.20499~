@@ -1,0 +1,37 @@
+<?php
+
+/**
+ * SITE 
+ */
+
+define('SITE', 'webceleb');
+
+/**
+ * @MYSQL
+ */
+
+define('MYSQL_USER', 'cult_user');
+define('MYSQL_PASSWORD', 'riteofpassage');
+define('MYSQL_DATABASE', 'cultoflogic');
+define('MYSQL_LOCATION', 'localhost');
+
+/**
+ * USERS
+ */
+
+define('FACEBOOK', true);
+
+/**
+ * RATING ALGO
+ */
+
+define('NUMER', 2);
+define('DENOM', 3);
+
+/**
+ * DEBUG MODE
+ */
+
+define('DEBUG_MODE', true);
+
+?>

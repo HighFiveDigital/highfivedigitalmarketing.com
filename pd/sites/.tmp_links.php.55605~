@@ -1,0 +1,16 @@
+<?php
+
+class links extends main {
+  public $table = 'links';
+  public $fields = array(
+    'title' => array('type' => 'varchar', 'length' => 100, 'required' => true),
+    'link' => array('type' => 'varchar', 'length' => 255, 'required' => true),
+  );
+  
+  
+  
+  
+  
+}
+
+?>

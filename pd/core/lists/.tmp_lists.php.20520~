@@ -1,0 +1,58 @@
+<?php
+namespace pd\core;
+class lists extends \pd\main {
+  
+  private $results;
+  private $data;
+  public $cur_result = 0;
+  
+  public function start($data) {
+    $this->set_default($data, 'page', 1);
+    $this->set_default($data, 'num', 10);
+    
+    //define match
+    //define order
+    
+    if (!empty($data['select'])) {
+      //perform list query
+      $list = pd($this->pd_parent->get_pd(), 'query')->select($data);
+    }
+    else {
+      $this->set_default($data, 'table', pd($this->pd_parent->get_pd(), 'tables')->get_default());
+      $this->set_default($data, 'order', array('time_stamp' => 'desc'));
+      $list = pd('lists', 'query')->select(array('select' => 'lists', 'table' => $data['table'], 'list' => $data));
+    }
+    //store total results
+    $data['total'] = pd('query')->get_count();
+    
+    //build link ary for all items in ary that are necessary for page to build
+    
+    $data['link'] = $this->get_link_ary($data);
+    
+    $this->results = $list;
+    $this->data = $data;
+  }
+  
+  public function get_next() {
+    if (!empty($this->results[$this->cur_result])) {
+      $next = $this->results[$this->cur_result];
+      $this->cur_result++;
+      return $next;
+    }
+    return false;
+  }
+  
+  public function control($data) {
+    $this->set_default($data, 'file', 'pages');
+    
+    $data['url'] = $this->data;
+
+    pd('lists')->build('html', $data);
+  }
+  
+  public function get_link_ary($data) {
+    //return array_diff_key($data, );
+  }
+
+}
+?>

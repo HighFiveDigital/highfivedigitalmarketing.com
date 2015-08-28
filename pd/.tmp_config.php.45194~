@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * SITE 
+ */
+
+define('SITE', 'urbangym');
+define('SITE_NAME', 'Urban Gym');
+define('SITE_DIR', '');
+
+/**
+ * @MYSQL
+ */
+
+define('MYSQL_USER', 'cult_user');
+define('MYSQL_PASSWORD', 'riteofpassage');
+define('MYSQL_DATABASE', 'urbangym');
+define('MYSQL_LOCATION', 'localhost');
+
+/**
+ * EMAIL
+ */
+
+define('EMAIL_FROM', 'admin@urbangym.com');
+
+/**
+ * DEBUG MODE
+ */
+
+define('DEBUG_MODE', true);
+
+?>

@@ -1,0 +1,135 @@
+/*====================================================================
+// CORE STYLES
+//===================================================================*/
+* {
+	margin: 0;
+	padding: 0;
+}
+body, html {
+	width: 100%;
+	font-family: helvetica, arial;
+	background-color: #fefbf5;
+}
+.red {
+	color: #d52128 !important;
+}
+
+/*====================================================================
+// PAGE LAYOUT
+//===================================================================*/
+#page-conatiner {
+	width: 945px;
+	margin: 0 auto;
+	overflow: hidden;
+	margin-top: 12px;
+}
+#left-col {
+	width: 184px;
+	float: left;
+}
+#right-col {
+	overflow: hidden;
+	padding-left: 46px;
+}
+
+/*====================================================================
+// LEFT COLUMN AND MAIN MENU
+//===================================================================*/
+#logo {
+	
+}
+#logo-copy {
+	text-align: center;
+	font-size: 12px;
+	font-weight: bold;
+}
+#left-col-menu-container {
+	list-style: none;
+	overflow: hidden;
+	margin-top: 15px;
+}
+#left-col-menu-container li {
+	float: left;
+	margin-right: 9px;
+}
+#left-col-menu-container li.list-last {
+	margin-right: 0;
+}
+#left-col-menu-container a {
+	display: block;
+	text-decoration: none;
+	color: #333333;
+}
+.left-col-menu-copy {
+	display: block;
+	font-size: 10px;
+	text-align: center;
+}
+#contact-us-form-container {
+	display: none;
+}
+#contact-us {
+	display: block;
+	text-align: center;
+	margin-top: 21px;
+}
+/*====================================================================
+// RIGHT COLUMN: HOME PAGE
+//===================================================================*/
+#home-page-top-banner a {
+	vertical-align: bottom;
+}
+#home-page-middle-banner {
+	margin-top: 33px;
+}
+#home-page-middle-copy {
+	font-family: Georgia;
+	text-align: center;
+	font-style: italic;
+}
+#home-page-services-header {
+	font-size: 18px;
+	font-weight: bold;
+	margin-bottom: 15px;	
+}
+#home-page-middle-copy-title {
+	font-size: 24px;
+	margin-top: 27px;
+}
+#home-page-middle-copy-list {
+	text-align: center;
+}
+#home-page-middle-copy-list li {
+	list-style: none;
+	font-size: 18px;
+	padding-top: 20px;
+}
+#home-page-middle-copy-CTA {
+	margin-top: 26px;
+}
+#home-page-middle-copy-CTA a {
+	font-size: 18px;
+}
+#home-page-services-scroller {
+	margin-top: 40px;
+	text-align: center;
+}
+#footer-container{
+	height: 112px;
+	background: url('../img/footer-bg.png') repeat-x top left;
+	margin-top: 54px;
+}
+#footer {
+	width: 945px;
+	margin: 0 auto;
+	padding-top: 10px;
+}
+#footer-logo {
+	margin-left: 230px;
+}
+#footer-copy {
+	font-size: 12px;
+	text-align: right;
+	color: #ffffff;
+	float: right;
+}

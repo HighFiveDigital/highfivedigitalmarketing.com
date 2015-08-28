@@ -1,0 +1,1 @@
+<input type="image" id="<?php pd('write')->str($data['field']['field_id']); ?>" src="<?php pd('write')->str($data['field']['src']); ?>"/>

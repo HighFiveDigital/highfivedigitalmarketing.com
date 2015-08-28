@@ -1,0 +1,15 @@
+<?php 
+
+pd('forms')->start(array(
+  'pd' => 'links',
+  'action' => 'submit'));
+pd('forms')->input('text', array(
+  'name' => 'link'));
+pd('forms')->error(array(
+  'default' => 'submit any link', 
+  'required' => 'enter a link', 
+  'too long' => 'seems that link is too long'));
+pd('forms')->input('submit', array('title' => 'Submit'));
+pd('forms')->end();
+
+?>

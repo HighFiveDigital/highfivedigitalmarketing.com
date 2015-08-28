@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+<page id="coming_soon">
+	<backgrounds>
+		<logo>images/big_logo.png</logo>
+		<bg>images/bg1.png</bg>
+		<bg>images/bg2.png</bg>
+		<bg>images/bg3.png</bg>
+	</backgrounds>
+	<texts> 
+			
+		<title><![CDATA[WE ARE CURRENTLY UNDER CONSTRUCTION]]></title>
+		<txt><![CDATA[HighFiveDigitalMarketing.com is coming soon, please check back.]]></txt>
+		<copyright><![CDATA[© 2011 HighFiveDigitalMarketing.com  |  Site By PaperBagged Web Development]]></copyright>
+		
+	</texts> 
+	<links> 
+			
+		<link_logo>http://www.paperbagged.com</link_logo>
+		<target_logo>none</target_logo>
+		<link_twitter>http://twitter.com/paperbaggedweb</link_twitter>
+		<target_twitter>none</target_twitter>
+		<link_rss>http://www.paperbagged.com</link_rss>
+		<target_rss>none</target_rss>
+		<link_facebook>http://www.facebook.com/pages/Paper-Bagged/188568164726</link_facebook>
+		<target_facebook>none</target_facebook>
+		<link_linked>http://www.paperbagged.com</link_linked>
+		<target_linked>none</target_linked>
+		<link_contact>mike@paper-bagged.com</link_contact>
+		<target_contact>none</target_contact>
+	</links> 
+	<settings> 
+			
+		<year>2011</year>
+		<month>2</month>
+		<day>28</day>
+		<all_days_before>1</all_days_before>
+		
+	</settings> 
+	
+
+ </page>
+
+
+</root>

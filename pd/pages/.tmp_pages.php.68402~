@@ -1,0 +1,9 @@
+<?php
+
+namespace pd;
+
+class pages extends \pd\main {
+  
+}
+
+?>

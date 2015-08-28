@@ -1,0 +1,9 @@
+<?php
+
+class session extends main {
+  public function init() {
+    
+  }
+}
+
+?>

@@ -1,0 +1,47 @@
+<?php
+
+$this->set_default($data, 'buffer', 8);
+$this->set_default($data['url'], 'num', 10);
+
+$num_pages = ceil($data['url']['total']/$data['url']['num']);
+
+$data['file'] = $data['url']['file']; //set the file reference to the php file that called this script
+
+$start_buffer = floor($data['buffer']/3);
+$start_page = $data['page']-$start_buffer;
+if ($start_page <= 1) {
+	$start_page = 1;
+}
+else {
+	$data['page'] = $start_page-1;
+	$start_block = build_link($data, '...');
+}
+
+$end_page = $start_page+$data['buffer'];
+
+if ($end_page >= $num_pages) {
+	$end_page = $num_pages;
+}
+else {
+	$data['page'] = $end_page+1;
+	$end_block = build_link($data, '...');
+}
+
+for ($i = $start_page; $i <= $end_page; $i++) {
+	if ($i == $data['url']['page']) {
+		$block .= " <span class=\"active\">$i</span> ";
+	}
+	else {
+	  $data['page'] = $i;
+		$block .= build_link($data, $i);
+	}
+}
+
+echo $start_block.$block.$end_block;
+
+
+	function build_link($data, $label) {
+		return '<a href="'.pd(pd('lists')->get_parent(), 'urls')->get_url($data, $data['url']['url']).'">'.$label.'</a>';
+	}
+
+?>

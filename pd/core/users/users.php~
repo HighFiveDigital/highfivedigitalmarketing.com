@@ -1,0 +1,31 @@
+<?php
+
+class users extends main {
+  public $tables = array(
+    'users' => array(
+      'fields' => array(
+        'email' => array('type' => 'varchar', 'length' => 100, 'no_duplicate' => true),
+        'ip_add' => array('type' => 'varchar', 'length' => 16),
+        'password' => array('type' => 'varchar', 'length' => 20)
+      ),
+      'connections' => array()
+    )
+  );
+  
+  public function get_connection($data) {
+    //data defines $data[type]
+    switch($data['type']) {
+      case 'logged_in':
+        
+        break;
+    }
+  }
+  
+  public function get_session_id() {
+    if (!empty($_SESSION['user']['id'])) {
+      
+    }
+  }
+}
+
+?>

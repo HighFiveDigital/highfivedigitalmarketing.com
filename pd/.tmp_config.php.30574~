@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * SITE 
+ */
+
+define('SITE', 'cultoflogic');
+define('SITE_NAME', 'Cult of Logic');
+define('SITE_DIR', 'new/');
+
+/**
+ * @MYSQL
+ */
+
+define('MYSQL_USER', 'cult_user');
+define('MYSQL_PASSWORD', 'riteofpassage');
+define('MYSQL_DATABASE', 'cultoflogic');
+define('MYSQL_LOCATION', 'localhost');
+
+/**
+ * EMAIL
+ */
+
+define('EMAIL_FROM', 'master_of_ceremonies@cultoflogic.com');
+
+/**
+ * DEBUG MODE
+ */
+
+define('DEBUG_MODE', true);
+
+?>

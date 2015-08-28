@@ -1,0 +1,388 @@
+<?php
+
+/**
+ * PD main
+ * 
+ * The core for Palmer dev websites
+ * 
+ * Version 0.1
+ */
+
+namespace pd/;
+
+class main {
+  
+  /**
+   * @var
+   * obj - stores all object instances
+   * error_on - turns on error reporting
+   */
+  
+  private $obj = array();
+  private $subs = array();
+  private $errors = array();
+  private $error_on = true;
+  private $ajax = true;
+  private $path = 'pd/';
+  
+  /**
+   * Init
+   * @return 
+   */
+  
+  public function __construct() {
+    require_once($this->path.'config.php');
+  }
+  
+  public function init() {
+    $this->filter_input(); //clean incoming user data
+    //$this->process_post(); //process all posts
+    $this->process_action(); //processes all actions
+    
+    
+    //$this->login_user(); //logs in the user
+    //$this->init_errors();
+  }
+  
+  private function filter_input() {
+    pd('filter')->input_ary($_POST);
+    pd('filter')->input_ary($_GET);
+    pd('filter')->input_ary($_COOKIE);
+    pd('filter')->input_ary($_REQUEST);
+  }
+  
+  public function write($str, $format = 'html') {
+    echo pd('filter')->output_str($str, $format);
+  }
+  
+  public function get_cur_dir() {
+    return dirname($this->loc);
+    //return dirname(__FILE__);
+  }
+  
+  private function process_post() {
+    //write errors to $GLOBALS['error']
+    if (!empty($_POST) && !empty($_POST['form']) && !empty($_POST['pd'])) {
+      $path = 'pd/'.$_POST['pd'].'/posts/'.$_POST['form'].'.php';
+      if (file_exists($path)) {
+        include($path);
+      }
+    }
+  }
+  
+  private function process_action() {
+    
+    //write errors to $GLOBALS['error']
+    if (!empty($_REQUEST) && !empty($_REQUEST['action']) && !empty($_REQUEST['pd'])) {
+      if (!$this->include_file($_REQUEST['pd'], $_REQUEST['action'], 'actions', $_REQUEST)) {
+        if (in_array($_REQUEST['action'], $this->common_actions)) {
+          
+          $eval = 'pd('.$_REQUEST['pd'].')->'.$_REQUEST['action'].'($_REQUEST);';
+    
+          eval($eval);
+        }  
+      }
+    }
+  }
+  
+  private function login_user() {
+    pd('users')->init_login();
+  } 
+
+  
+  //build methods
+  
+  /**
+   * build - constructs html blocks
+   * @return 
+   * @param array $data
+   */
+  
+  
+  public function disp($data, $field, $filter = 'html_single', $length = 0) {
+    echo $this->obj('filter')->output_str(pd($this->get_pd())->rec($data, $field), $filter, $length);
+  }
+  
+  public function build($folder, $data) {
+    $this->include_file($this->get_pd(), $data['file'], $folder, $data);
+  }
+  
+  public function build_pd_link($data) {  
+    echo 'pd.php?pd='.$this->get_pd().'&'.http_build_query($data, null, '&');
+  }
+  
+  public function goto_pd($data) {
+    
+    header('location:pd.php?pd='.$this->get_pd().'&'.http_build_query($data, null, '&'));
+  }
+  
+  /**
+   * obj
+   * 
+   * @return 
+   * @param object $type
+   */
+  
+  public function obj($type, $sub) {
+    if (!empty($sub)) {
+      if (!isset($this->subs[$type][$sub])) {
+        if ($this->include_file($type.'/'.$sub, $sub)) {
+          //create new instance of object
+          $eval = '$obj = new '.$type.'();';
+    
+          eval($eval);
+          //return object
+          $this->obj[$type] = $obj;
+        }
+      }
+    }
+    
+    
+    
+    if (!isset($this->obj[$type])) {
+      //include class definition  
+
+      if ($this->include_file($type, $type)) {
+        //create new instance of object
+        $eval = '$obj = new '.$type.'();';
+  
+        eval($eval);
+        //return object
+        $this->obj[$type] = $obj;
+      }
+      else {
+        $this->err('pd: '.$type.' does not exist');
+      }
+    }
+    return $this->obj[$type];
+  }
+  
+  public function pd($obj) {
+    $this->obj($this->get_pd(), $obj);
+  }
+  
+  
+  protected function include_file($pd, $file, $folder = '', &$data = array()) {
+    if (!empty($folder)) {
+      $folder .= '/';
+    }
+    $custom_path = $this->path.$pd.'/'.$folder.$file.'.php';
+    $core_path = $this->path.'core/'.$pd.'/'.$folder.$file.'.php';
+
+    if (file_exists($custom_path)) {
+      require($custom_path);
+      return true;
+    }
+    else if (file_exists($core_path)) {
+      require($core_path);
+      return true;
+    }
+    return false;
+  }
+  
+  
+  /**
+   * sub
+   */
+  
+  protected function sub($sub) {
+    if (!isset($this->subs[get_class($this)][$sub])) {
+      //include class definition
+      require_once($this->get_cur_dir().'/'.$sub.'/'.$sub.'.php');
+      
+      //create new instance of object
+      $eval = '$sub_obj = new pd_'.$sub.'();';
+      eval($eval);
+
+      //return object
+      $this->subs[get_class($this)][$sub] = $sub_obj;
+    }
+    return $this->subs[get_class($this)][$sub];
+  }
+  
+  //for variable requirements
+  protected function req($require, $data) {
+    if (empty($require)) {
+      return;
+    }
+    foreach ($require as $req) {
+      if (!isset($data[$req])) {
+        $this->err($req.' is required');
+      }
+    }
+  }
+  
+  //for coding errors
+  protected function err($error) {
+    if (DEBUG_MODE) {
+      echo "
+        <div class=\"php_error\">
+          error: $error <br/>
+          location: ";
+      debug_print_backtrace();      
+      echo "
+        </div>";
+      exit;
+    }
+  }
+  
+  //for class methods
+  public function get_pd() {
+    return get_class($this);
+  }
+  
+  
+  
+  /**
+   * Url Methods
+   * @return 
+   */
+  
+  public function cur_url() {
+    echo $_SERVER['REQUEST_URI'];
+    //echo ltrim($_SERVER['REQUEST_URI'], '/');
+  }
+  
+  public function get_full_cur_url() {
+    $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on'
+      ? 'https://'
+      : 'http://';
+    return $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+  }
+  
+  
+  //for retrieving info for a record
+  protected function get($data, $field = '') {
+    if (empty($data['id'])) {
+      return;
+    }
+    $this->req(array('id'), $data);
+
+    return pd('query')->rec(array('id' => $data['id'], 'table' => $this->table), $field);
+  }
+  
+  public function get_ip_add() {
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {  //check ip from share internet 
+      $ip=$_SERVER['HTTP_CLIENT_IP'];
+    }
+    elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {  //to check ip is pass from proxy
+      $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+    }
+    else {
+      $ip=$_SERVER['REMOTE_ADDR'];
+    }
+    return $ip;
+  }
+  
+  
+  /**
+   * Common Actions
+   */
+  
+  public $common_actions = array('add');
+  
+  public function add($data) {
+    $action = $data['action'];
+    $insert = array();
+    
+    //check user input fields - if validated add them to the insert array
+    if (!empty($this->tables[$data['table']]['fields'])) { //if fields are set
+      foreach ($data as $col => $val) {
+        if (array_key_exists($col, $this->tables[$data['table']]['fields'])) {
+          $insert[$col] = $val;
+          $this->check_field($data, $col, $this->tables[$data['table']]['fields'][$col], $val);
+        }
+      }
+    }
+    //extra error checking can go here (custom?)
+    
+    
+    //connections
+    foreach ($this->tables[$data['table']]['connections'] as $field => $connection) {
+      pd($connection['pd'])->get_connection($data);
+    }
+    
+    
+    
+    if ($this->no_action_errors($action)) {
+      if (!empty($data['on_success'])) {
+        header('location:'.$data['on_success']);
+      }
+      pd('query')->insert(array(
+        'pd' => $this->get_pd(),
+        'table' => $data['table'],
+        'insert' => $insert));
+    }
+    
+  }
+  
+  /**
+   * Forms
+   */ 
+  
+  
+  
+   
+  private function check_field($data, $field, $specs, $val) {
+    if ($this->check_required($data, $field, $specs, $val)) {}
+    else if ($this->check_length($data, $field, $specs, $val)) {}
+    else if ($this->check_duplicate($data, $field, $specs, $val)) {}
+  }
+  
+  private function check_required($data, $field, $specs, $val) {
+    if (!empty($specs['required'])) {
+      if (strlen($val) < 1) {
+        //triggor error
+        return $this->input_err($data['action'], $field, 'required');
+      }
+    }
+  }
+  
+  private function check_length($data, $field, $specs, $val) {
+    if (!empty($specs['length'])) {
+      if (strlen($val) > $specs['length']) {
+        //triggor error
+        return $this->input_err($data['action'], $field, 'too long');
+      }
+    }
+  }
+  
+  private function check_duplicate($data, $field, $specs, $val) {
+    if (!empty($specs['no_duplicate'])) {
+      //check if it exists in the db
+      
+      $match = pd('query')->select(array(
+        'pd' => $this->get_pd(),
+        'table' => $data['table'],
+        'select' => 'duplicate',
+        'fields' => array($field => $val)));  
+            
+      if (!empty($match)) {
+        //triggor error
+        return $this->input_err($data['action'], $field, 'duplicate');
+        
+      }
+    }
+  }
+  
+  
+  //form methods
+  protected function input_err($action, $field, $error) {
+    $this->errors[$action][$field] = $error;
+    return true;
+  }
+  
+  public function get_errors($action, $field) {
+    return $this->errors[$action][$field['name']];
+  }
+ 
+  public function no_action_errors($action) {
+    if (empty($this->errors[$action])) {
+      return true;
+    }
+    return false;
+  }
+  
+}
+
+?>

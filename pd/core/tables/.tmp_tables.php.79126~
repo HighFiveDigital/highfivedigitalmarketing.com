@@ -1,0 +1,133 @@
+<?php
+namespace pd\core;
+class tables extends \pd\main {
+  public function get_default() {
+    if (!empty($this->pd_parent->tables)) {
+      return $this->get_first_ary_index($this->pd_parent->tables);
+    }
+    return '';
+  }
+  
+  public function get_table($data, $index = '') {
+    if (empty($index)) {
+      return $this->pd_parent->tables[$data['table']];
+    }
+    if (!empty($this->pd_parent->tables[$data['table']][$index])) {
+      return $this->pd_parent->tables[$data['table']][$index];
+    }
+    return false;
+  }
+  
+  public function get_stored($data) {
+    return pd($this->get_parent(), 'fields')->get_stored($data);
+  }
+  
+  
+  /**
+   * Create table
+   * 
+   */
+  
+  public function create_table($data) {
+    $this->req($data, array('table'));
+    
+    
+  }
+  
+  private $validate = array('access', 'fields', 'connections');
+  
+  public function validate(&$data, $qry = 'select') {
+    $this->set_default($data, 'action', 'validate');
+    $this->set_default($data, 'table', $this->get_default());
+    $this->set_default($data, 'validate', $this->validate);
+    
+    foreach ($data['validate'] as $validate) {
+      if (!$this->check($validate, $data, $qry)) {
+        return false;
+      }
+    }
+    return true;
+  }
+  
+  public function check($type, $data, $qry) {
+    eval('$return = $this->check_'.$type.'($data, $qry);');
+    return $return;
+  }
+  
+  private $access = array('owner', 'label');
+  
+  public function check_access($data, $qry) {
+    if ($qry != 'select' && $qry != 'add' && $qry != 'edit' && $qry != 'remove') {
+      return true;
+    }
+    
+    if ($access = $this->get_table($data, 'access')) {
+      //print_r($access);
+      if (!empty($access[$qry])) {
+        //echo $qry;
+        foreach($access[$qry] as $type => $arg) {
+          if ($this->access($type, $arg, $data, $qry)) {
+            return true;
+          }
+        }
+        //echo 'not allowed';
+        pd('errors')->set('not allowed', $data['action'], 'action');
+        return false;
+      }
+    }
+    return true;
+  }
+  
+  public function access($type, $arg, $data, $qry) {
+    eval('$return = $this->access_'.$type.'($arg, $data, $qry);');
+    return $return;
+  }
+  
+  public function access_owner($arg, $data, $qry) {
+    if ($qry == 'add') {
+      return true;
+    }
+    if (pd($this->get_parent())->get($data, $arg) == pd('users')->get_session_id()) {
+      return true;
+    }
+    return false;
+  }
+  
+  public function access_label($arg, $data, $qry) {
+    return pd('users')->access($arg);
+  }
+  
+  public function check_fields(&$data, $qry) {
+    if ($qry != 'add' && $qry != 'edit' && $qry != 'fields') {
+      return true;
+    }
+    pd('fields')->clear_stored();
+    //check user input fields - if validated add them to the value array
+    if ($fields = $this->get_table($data, 'fields')) { //if fields are set
+      foreach ($data as $field => $val) {
+        if (array_key_exists($field, $fields)) {
+          pd($this->get_parent(), 'fields')->validate($data, $field, $val);
+        }
+      }
+    }
+    if (pd('errors')->no_errors($data['action'])) {
+      return true;
+    }
+    return false;
+  }
+  
+  public function check_connections(&$data, $qry) {
+    if ($qry != 'add') {
+      return true;
+    }
+    //connections
+    if ($connections = $this->get_table($data,'connections')) {
+      foreach ($connections as $field => $connection) {
+        pd($this->get_parent(), 'fields')->store($data, $field, pd($connection['pd'])->get_connection($connection));    
+      }
+    }
+    return true;
+  }
+ 
+}
+?>

@@ -1,0 +1,7 @@
+<?php
+namespace pd\core;
+class cookies extends main {
+  
+}
+
+?>

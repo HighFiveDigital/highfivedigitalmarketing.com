@@ -1,0 +1,37 @@
+<?php
+
+/**
+ * SITE 
+ */
+
+define('SITE', 'webceleb');
+
+/**
+ * @MYSQL
+ */
+
+define('MYSQL_USER', 'webceleb_user');
+define('MYSQL_PASSWORD', 'Es.16E2}%(VT');
+define('MYSQL_DATABASE', 'webceleb_main');
+define('MYSQL_LOCATION', 'dbm.webceleb.com');
+
+/**
+ * USERS
+ */
+
+define('FACEBOOK', true);
+
+/**
+ * RATING ALGO
+ */
+
+define('NUMER', 2);
+define('DENOM', 3);
+
+/**
+ * DEBUG MODE
+ */
+
+define('DEBUG_MODE', true);
+
+?>

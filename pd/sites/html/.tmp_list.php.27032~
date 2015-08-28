@@ -1,0 +1,48 @@
+<?php
+
+pd('lists')->set_default($data, 'url', 'list');
+pd('lists')->set_default($data, 'path', '');
+
+pd('videos')->build('js', array('file' => 'videos'));
+
+pd('urls')->define_url($data['url'], array(
+    'path' => $data['path'],
+    'vars' => array(
+      'p' => array('value' => 'page'),
+      's' => array('serialize' => 'order')
+    )
+  ), $data);
+
+pd('links', 'lists')->start($data);
+
+?>
+<ul class="links_list">
+
+<?php
+while($link = pd('lists')->get_next()) {
+  ?>
+    <li>
+      <h2>
+        <?php pd('write')->str($link['title']); ?>
+      </h2>
+      <p>
+        <?php pd('write')->str($link['description']); ?>
+      </p>
+   <?php if (pd('users')->get_session_id() == pd('links')->get($link, 'user_id')) { ?>
+     <a href="<?php pd('links', 'write')->pd_link(array('file' => 'edit', 'id' => $link['id'])); ?>">edit</a>
+     <a href="<?php pd('links', 'write')->pd_link(array('action' => 'remove', 'on_success' => 'index.php', 'id' => $link['id'])); ?>">remove</a>
+   <?php } ?>
+      <div class="preview">
+        <?php pd('links')->build_preview($link); ?>
+      </div>
+      <a target="_blank" href="<?php pd('write')->str($link['link']); ?>"><?php pd('write')->str($link['link']); ?></a>
+    </li>
+  <?php
+}
+?>
+
+</ul>
+
+<?php
+pd('links', 'lists')->control(array('file' => 'pages'));
+?>

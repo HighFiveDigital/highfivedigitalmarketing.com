@@ -1,0 +1,8 @@
+<form method="<?php pd('forms')->build_method($data['form']); ?>" action="<?php pd('forms')->cur_url(); ?>">
+  <?php
+    foreach ($data['form'] as $name => $val) {
+      ?>
+        <input type="hidden" name="<?php pd('write')->str($name); ?>" value="<?php pd('write')->str($val); ?>" />
+      <?php
+    }
+  ?>

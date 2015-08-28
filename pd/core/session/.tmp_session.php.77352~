@@ -1,0 +1,9 @@
+<?php
+namespace pd\core;
+class session extends main {
+  public function init() {
+    
+  }
+}
+
+?>
